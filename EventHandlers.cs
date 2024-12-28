@@ -40,14 +40,15 @@ public partial class MatchZy
             {
                 playerData[player.UserId.Value] = player;
                 connectedPlayers++;
-                if (readyAvailable && !matchStarted)
-                {
-                    playerReadyStatus[player.UserId.Value] = false;
-                }
-                else
-                {
-                    playerReadyStatus[player.UserId.Value] = true;
-                }
+                // if (readyAvailable && !matchStarted)
+                // {
+                //     playerReadyStatus[player.UserId.Value] = false;
+                // }
+                // else
+                // {
+                //     playerReadyStatus[player.UserId.Value] = true;
+                // }
+                playerReadyStatus[player.UserId.Value] = true;
             }
             // May not be required, but just to be on safe side so that player data is properly updated in dictionaries
             // Update: Commenting the below function as it was being called multiple times on map change.
@@ -105,6 +106,8 @@ public partial class MatchZy
             noFlashList.Remove(userId);
             lastGrenadesData.Remove(userId);
             nadeSpecificLastGrenadeData.Remove(userId);
+
+            PrintToAllChat($"{player.PlayerName} se desconectou!");
 
             return HookResult.Continue;
         }
