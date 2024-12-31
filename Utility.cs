@@ -370,7 +370,7 @@ namespace MatchZy
             return (count, totalHealth);
         }
 
-        private void ResetMatch(bool warmupCfgRequired = true)
+        private void ResetMatch(bool warmupCfgRequired = true, bool cancelMatch = false)
         {
             try
             {
@@ -477,6 +477,10 @@ namespace MatchZy
 
                 KillPhaseTimers();
                 UpdatePlayersMap();
+                if (cancelMatch)
+                {
+                    HandleCancelMatch();
+                }
                 if (warmupCfgRequired)
                 {
                     StartWarmup();
@@ -488,6 +492,7 @@ namespace MatchZy
                     unreadyPlayerMessageTimer = null;
                     unreadyPlayerMessageTimer ??= AddTimer(chatTimerDelay, SendUnreadyPlayersMessage, TimerFlags.REPEAT);
                 }
+
             }
             catch (Exception ex)
             {
@@ -966,7 +971,7 @@ namespace MatchZy
             });
         }
 
-        private void HandleWarmupEnd()
+        private void HandleCancelMatch()
         {
             int timeUntilReady = 300;
 
@@ -974,7 +979,7 @@ namespace MatchZy
             {
                 if (isMatchLive) return;
 
-                Log($"[HandleWarmupEnd] Match not ready after {timeUntilReady} seconds. Canceling the match.");
+                Log($"[HandleCancelMatch] Match not ready after {timeUntilReady} seconds. Canceling the match.");
                 // Capturar SteamIDs dos jogadores conectados
                 var connectedPlayersSteamIds = playerData.Values
                     .Where(player => IsPlayerValid(player))
@@ -989,7 +994,7 @@ namespace MatchZy
                 Task.Run(async () =>
                 {
                     await SendEventAsync(warmupEndEvent);
-                    Log($"[HandleWarmupEnd] SentEvent WarmupEndEvent");
+                    Log($"[HandleCancelMatch] SentEvent WarmupEndEvent");
                 });
             });
         }

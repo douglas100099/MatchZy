@@ -75,7 +75,7 @@ namespace MatchZy
                 {
                     // command.ReplyToCommand("Match load failed! Resetting current match");
                     ReplyToUserCommand(player, Localizer["matchzy.mm.matchloadfailed"]);
-                    ResetMatch();
+                    ResetMatch(true, true);
                 }
                 loadedConfigFile = fileName;
             }
@@ -131,7 +131,7 @@ namespace MatchZy
                     {
                         // command.ReplyToCommand("Match load failed! Resetting current match");
                         ReplyToUserCommand(player, Localizer["matchzy.mm.matchloadfailed"]);
-                        ResetMatch();
+                        ResetMatch(true, true);
                     }
                     loadedConfigFile = url;
                 }
@@ -392,8 +392,6 @@ namespace MatchZy
             {
                 await SendEventAsync(seriesStartedEvent);
             });
-
-            HandleWarmupEnd();
 
             Log($"[LoadMatchFromJSON] Success with matchid: {liveMatchId}!");
             return true;
