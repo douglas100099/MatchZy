@@ -97,6 +97,7 @@ public class MatchZyPlayerDisconnectedEvent : MatchZyMatchEvent
 {
     [JsonPropertyName("player")]
     public required int Player { get; init; }
+    public required string PlayerSteamId { get; init; }
 
     public MatchZyPlayerDisconnectedEvent() : base("player_disconnect")
     {
@@ -233,6 +234,16 @@ public class MatchZyDemoUploadedEvent : MatchZyMatchEvent
     public bool Success { get; set; }
 
     public MatchZyDemoUploadedEvent() : base("demo_upload_ended")
+    {
+    }
+}
+
+public class MatchZyWarmupEndedEvent : MatchZyMapEvent
+{
+    [JsonPropertyName("connected_players")]
+    public List<string> ConnectedPlayersSteamIds { get; init; } = new();
+
+    public MatchZyWarmupEndedEvent() : base("warmup_end")
     {
     }
 }
