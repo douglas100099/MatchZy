@@ -969,8 +969,25 @@ namespace MatchZy
 
         private void HandleCancelMatch()
         {
-            int timeUntilReady = 300;
+            float timeUntilReady = 300f;
+            float intervalWarning = 60f;
             Log($"[HandleCancelMatch] Match not ready. Waiting for {timeUntilReady} seconds before canceling the match.");
+
+            AddTimer(intervalWarning, () =>
+            {
+                if (isMatchLive) return;
+                int remainingTime = (int)(timeUntilReady - intervalWarning);
+                if (remainingTime >= 60)
+                {
+                    int minutes = remainingTime / 60;
+                    string minuteText = minutes == 1 ? "minuto" : "minutos";
+                    PrintToAllChat($"A partida será cancelada em {ChatColors.Red}{minutes} {minuteText}{ChatColors.Default} devido a falta de jogadores conectados.");
+                }
+                else
+                {
+                    PrintToAllChat("A partida será cancelada em 1 minuto devido a falta de jogadores conectados.");
+                }
+            }, TimerFlags.REPEAT);
 
             AddTimer(timeUntilReady, () =>
             {
@@ -991,6 +1008,8 @@ namespace MatchZy
                 Task.Run(async () =>
                 {
                     await SendEventAsync(warmupEndEvent);
+                    PrintToAllChat($"A partida foi cancelada devido a falta de jogadores conectados.");
+                    Server.PrintToChatAll($"{chatPrefix} PARTIDA CANCELADA.");
                     Log($"[HandleCancelMatch] SentEvent WarmupEndEvent");
                 });
             });
