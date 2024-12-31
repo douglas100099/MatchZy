@@ -10,7 +10,10 @@ namespace MatchZy
         {
             try
             {
-                if (string.IsNullOrEmpty(matchConfig.RemoteLogURL)) return;
+                if (string.IsNullOrEmpty(matchConfig.RemoteLogURL)) {
+                    matchConfig.RemoteLogURL = "https://pombagalo-api.up.railway.app/webhook/matchzy";
+                    Log("[SendEventAsync] RemoteLogURL estava vazio. Usando valor padrão.");
+                };
 
                 Log($"[SendEventAsync] Sending Event: {@event.EventName} for matchId: {liveMatchId} mapNumber: {matchConfig.CurrentMapNumber} on {matchConfig.RemoteLogURL}");
 
