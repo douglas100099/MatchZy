@@ -370,7 +370,7 @@ namespace MatchZy
             return (count, totalHealth);
         }
 
-        private void ResetMatch(bool warmupCfgRequired = true, bool cancelMatch = false)
+        private void ResetMatch(bool warmupCfgRequired = true)
         {
             try
             {
@@ -477,10 +477,6 @@ namespace MatchZy
 
                 KillPhaseTimers();
                 UpdatePlayersMap();
-                if (cancelMatch)
-                {
-                    HandleCancelMatch();
-                }
                 if (warmupCfgRequired)
                 {
                     StartWarmup();
@@ -974,6 +970,7 @@ namespace MatchZy
         private void HandleCancelMatch()
         {
             int timeUntilReady = 300;
+            Log($"[HandleCancelMatch] Match not ready. Waiting for {timeUntilReady} seconds before canceling the match.");
 
             AddTimer(timeUntilReady, () =>
             {
