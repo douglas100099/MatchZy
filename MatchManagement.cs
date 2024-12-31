@@ -393,29 +393,7 @@ namespace MatchZy
                 await SendEventAsync(seriesStartedEvent);
             });
 
-            int timeUntilReady = 300;
-            AddTimer(timeUntilReady, () =>
-            {
-                if (isMatchLive) return;
-
-                Log($"[LoadMatchFromJSON] Match not ready after {timeUntilReady} seconds. Canceling the match.");
-                // Capturar SteamIDs dos jogadores conectados
-                var connectedPlayersSteamIds = playerData.Values
-                    .Where(player => IsPlayerValid(player))
-                    .Select(player => player.SteamID.ToString())
-                    .ToList();
-                var warmupEndEvent = new MatchZyWarmupEndedEvent
-                {
-                    MatchId = liveMatchId,
-                    MapNumber = matchConfig.CurrentMapNumber,
-                    ConnectedPlayersSteamIds = connectedPlayersSteamIds
-                };
-
-                Task.Run(async () =>
-                {
-                    await SendEventAsync(warmupEndEvent);
-                });
-            });
+            HandleWarmupEnd();
 
             Log($"[LoadMatchFromJSON] Success with matchid: {liveMatchId}!");
             return true;

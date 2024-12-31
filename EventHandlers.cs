@@ -112,18 +112,21 @@ public partial class MatchZy
             PrintToAllChat($"{player.PlayerName} se desconectou!");
             Log($"[EventPlayerDisconnect] Player ID: {userId}, Name: {player.PlayerName} has disconnected!");
 
-            // Webhook: Enviar evento de desconexão com SteamID
-            var disconnectEvent = new MatchZyPlayerDisconnectedEvent
+            if (!player.IsBot && player.IsHLTV)
             {
-                MatchId = liveMatchId,
-                Player = userId,
-                PlayerSteamId = player.SteamID.ToString()
-            };
+                // Webhook: Enviar evento de desconexão com SteamID
+                var disconnectEvent = new MatchZyPlayerDisconnectedEvent
+                {
+                    MatchId = liveMatchId,
+                    Player = userId,
+                    PlayerSteamId = player.SteamID.ToString()
+                };
 
-            Task.Run(async () =>
-            {
-                await SendEventAsync(disconnectEvent);
-            });
+                Task.Run(async () =>
+                {
+                    await SendEventAsync(disconnectEvent);
+                });
+            }
 
             return HookResult.Continue;
         }

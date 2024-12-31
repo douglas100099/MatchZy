@@ -238,7 +238,7 @@ public class MatchZyDemoUploadedEvent : MatchZyMatchEvent
     }
 }
 
-public class MatchZyWarmupEndedEvent : MatchZyMapEvent
+public class MatchZyWarmupEndedEvent : MatchZyMatchEvent
 {
     [JsonPropertyName("connected_players")]
     public List<string> ConnectedPlayersSteamIds { get; init; } = new();
