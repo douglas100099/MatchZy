@@ -134,42 +134,6 @@ public partial class MatchZy
         }
     }
 
-    public HookResult EventWarmupEndHandler(GameEventInfo info)
-    {
-        try
-        {
-            Log($"[EventWarmupEnd] Warmup has ended!");
-
-            // Capturar SteamIDs dos jogadores conectados
-            var connectedPlayersSteamIds = playerData.Values
-                .Where(player => IsPlayerValid(player))
-                .Select(player => player.SteamID.ToString())
-                .ToList();
-
-            // Criar evento e enviar webhook
-            var warmupEndEvent = new MatchZyWarmupEndedEvent
-            {
-                MatchId = liveMatchId,
-                MapNumber = matchConfig.CurrentMapNumber,
-                ConnectedPlayersSteamIds = connectedPlayersSteamIds
-            };
-
-            Task.Run(async () =>
-            {
-                await SendEventAsync(warmupEndEvent);
-            });
-
-            PrintToAllChat("Partida encerrada devido a falta de jogadores!");
-
-            return HookResult.Continue;
-        }
-        catch (Exception e)
-        {
-            Log($"[EventWarmupEnd FATAL] An error occurred: {e.Message}");
-            return HookResult.Continue;
-        }
-    }
-
     public HookResult EventCsWinPanelRoundHandler(EventCsWinPanelRound @event, GameEventInfo info)
     {
         // EventCsWinPanelRound has stopped firing after Arms Race update, hence we handle knife round winner in EventRoundEnd.
